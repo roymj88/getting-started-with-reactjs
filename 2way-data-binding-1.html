@@ -26,19 +26,34 @@
 
 			getInitialState: function () {
 				return {
-					payment: 0
+					payment1: 10,
+					payment2: 20,
 				}
 		    },
 			render: function() {
-
+				var totalPayment =  parseInt(this.state.payment1, 10) + parseInt(this.state.payment2, 10)
 				return (
 					<div class="container">
-						<input type="text" valueLink= {this.linkState('payment')} />
+						<PaymentComponent valueLink = {this.linkState('payment1')} />
+						&nbsp;
+						+
+						&nbsp;
+						<PaymentComponent valueLink = {this.linkState('payment2')} />
 						<br />
 						<br />
-						{this.state.payment}
+						{totalPayment}
 					</div>
 				);
+			}
+		});
+
+
+		var PaymentComponent = React.createClass({
+			render: function(){
+				var props = this.props;
+				return this.transferPropsTo(
+					<input type="text" />
+				)
 			}
 		});
 
