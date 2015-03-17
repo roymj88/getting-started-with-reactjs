@@ -13,6 +13,7 @@
 
 	<script src="js/react-0.11.1.js"></script>
   	<script src="js/JSXTransformer-0.11.1.js"></script>
+  	<script src="js/lodash.js"></script>
 
 
 
@@ -20,6 +21,15 @@
 	/** @jsx React.DOM */
 
 		var MessageBox = React.createClass({
+			deleteNow: function(messageToDelete){
+				console.log(messageToDelete);
+				console.log (this.state.messages);
+
+				var newMessages = _.without(this.state.messages, messageToDelete);
+				this.setState({messages:newMessages});
+
+
+			},
 			handleClick: function(e){
 				console.log(this.refs.newMessage.getDOMNode().value);
 				var newMessage = this.refs.newMessage.getDOMNode().value;
@@ -41,12 +51,13 @@
 		    },
 			render: function() {
 				console.log("Yo");
+
 				var inlineStyle = {
         			display: this.state.isVisible ? 'block' : 'none'
       			};
       			var messages = this.state.messages.map(function(message){
-      				return <SubMessage message={message} />
-      			});
+      				return <SubMessage message={message} deleteMessage= {this.deleteNow} />
+      			}.bind(this));
 
 				return (
 					<div className="container jumbotron" style={inlineStyle}>
@@ -62,6 +73,12 @@
 		});
 
 		var SubMessage = React.createClass({
+			handleDelete: function(e){
+				console.log(this.props);
+				console.log(this.props.message);
+				this.props.deleteMessage(this.props.message);
+
+			},
 			propTypes: {
 				message: React.PropTypes.string.isRequired
 			},
@@ -73,7 +90,11 @@
 			},
 			render: function() {
 				return (
-					<div>{this.props.message}</div>
+					<div>
+						{this.props.message}
+						&nbsp;
+						<button onClick={this.handleDelete} class="btn btn-danger">X</button>
+					</div>
 					// <small>Small sub Message</small>
 				);
 			}
