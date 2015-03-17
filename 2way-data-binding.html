@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>2-way data binding</title>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+
+</head>
+<body>
+	
+	<!-- container node -->
+	<div id="app"></div>
+
+
+	<script src="js/react-with-addons-0.11.0.js"></script>
+  	<script src="js/JSXTransformer-0.11.1.js"></script>
+  	<script src="js/lodash.js"></script>
+
+
+
+	<script type="text/jsx">
+	/** @jsx React.DOM */
+
+		var App = React.createClass({
+			
+			mixins: [React.addons.LinkedStateMixin],
+
+			getInitialState: function () {
+				return {
+					payment: 0
+				}
+		    },
+			render: function() {
+
+				return (
+					<div class="container">
+						<input type="text" valueLink= {this.linkState('payment')} />
+						<br />
+						<br />
+						<br />
+						{this.state.payment}
+					</div>
+				);
+			}
+		});
+
+		var reactComponent = React.renderComponent(
+			<App />,
+			document.getElementById('app')
+		);
+
+	</script>
+
+</body>
+</html>
