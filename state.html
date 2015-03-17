@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Managing States</title>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+
+</head>
+<body>
+	
+	<!-- container node -->
+	<div id="app"></div>
+
+
+	<script src="js/react-0.11.1.js"></script>
+  	<script src="js/JSXTransformer-0.11.1.js"></script>
+
+
+
+	<script type="text/jsx">
+	/** @jsx React.DOM */
+
+		var MessageBox = React.createClass({
+			getInitialState: function () {
+				return {
+					isVisible: true,
+					titleMessage: 'Title Message'
+				}
+		    },
+			render: function() {
+				var inlineStyle = {
+        			display: this.state.isVisible ? 'block' : 'none'
+      			};
+				return (
+					<div className="container jumbotron" style={inlineStyle}>
+					  <h1>Hello, World</h1>
+					  <h3>{this.state.titleMessage}</h3>
+					  <SubMessage />
+					</div>
+				);
+			}
+		});
+
+		var SubMessage = React.createClass({
+			render: function() {
+				return (
+					<small>Small sub Message</small>
+				);
+			}
+		});
+
+		var reactComponent = React.renderComponent(
+			<MessageBox />,
+			document.getElementById('app')
+		);
+
+		// reactComponent.setState({isVisible: false})
+		// reactComponent.setState({isVisible: false, titleMessage: "Yo"})
+
+
+		// reactComponent.state.isVisible = false;
+		// reactComponent.forceUpdate()
+
+	</script>
+
+</body>
+</html>
