@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Managing Refs</title>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+
+</head>
+<body>
+	
+	<!-- container node -->
+	<div id="app"></div>
+
+
+	<script src="js/react-0.11.1.js"></script>
+  	<script src="js/JSXTransformer-0.11.1.js"></script>
+
+
+
+	<script type="text/jsx">
+	/** @jsx React.DOM */
+
+		var MessageBox = React.createClass({
+			handleClick: function(e){
+				console.log(this.refs.newMessage.getDOMNode().value);
+				var newMessage = this.refs.newMessage.getDOMNode().value;
+				var newMessages = this.state.messages.concat(newMessage);
+				this.setState({messages:newMessages});
+				// e is same as this - Synthetic events
+			},
+			getInitialState: function () {
+				return {
+					isVisible: true,
+					messages: [
+						"Yo 1",
+						"Yo 2",
+						"Yo 3",
+						"Yo 4",
+					],
+					titleMessage: 'Title Message'
+				}
+		    },
+			render: function() {
+				var inlineStyle = {
+        			display: this.state.isVisible ? 'block' : 'none'
+      			};
+      			var messages = this.state.messages.map(function(message){
+      				return <SubMessage message={message} />
+      			});
+
+				return (
+					<div className="container jumbotron" style={inlineStyle}>
+					  <h1>Hello, World</h1>
+					  <h3>{this.state.titleMessage}</h3>
+					  <h3>{this.props.newMessage}</h3>
+					  {messages}
+					  <input type="text" ref="newMessage"/>
+					  <button class='btn' onClick={this.handleClick}>Click Me!</button>
+					</div>
+				);
+			}
+		});
+
+		var SubMessage = React.createClass({
+			propTypes: {
+				message: React.PropTypes.string.isRequired
+			},
+			getDefaultProps: function(){
+				return {
+					message: 123
+					// message: "Its good to see you - sub message via props"
+				}
+			},
+			render: function() {
+				return (
+					<div>{this.props.message}</div>
+					// <small>Small sub Message</small>
+				);
+			}
+		});
+		var message = "custom message"
+
+		var reactComponent = React.renderComponent(
+			<MessageBox newMessage = {message}/>,
+			document.getElementById('app')
+		);
+
+	</script>
+
+</body>
+</html>
