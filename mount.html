@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mounting</title>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+
+</head>
+<body>
+	
+	<!-- container node -->
+	<div id="app"></div>
+
+
+	<script src="js/react-with-addons-0.11.0.js"></script>
+  	<script src="js/JSXTransformer-0.11.1.js"></script>
+  	<script src="js/jquery-2.1.1.min.js"></script>
+  	<script src="js/lodash.js"></script>
+
+
+
+	<script type="text/jsx">
+	/** @jsx React.DOM */
+
+		var App = React.createClass({
+
+			mixins: [React.addons.LinkedStateMixin],
+
+			loadData: function(){
+				return $.get("https://gsr-demo.firebaseio-demo.com/"+ this.props.url+ '.json');
+			},
+			componentWillMount: function(){
+				debugger;
+			},
+
+			componentDidMount: function(){
+				debugger;
+				this.loadData().then(function(data){
+					console.log(data);
+					this.setState({
+						metric:data
+					})
+				}.bind(this));
+			},
+
+			getInitialState: function () {
+				return {
+					payment1: 10,
+					payment2: 20,
+					metric: 20,
+				}
+		    },
+
+			render: function() {
+				var totalPayment =  parseInt(this.state.payment1, 10) + parseInt(this.state.payment2, 10)
+				return (
+					<div class="container">
+						<PaymentComponent valueLink = {this.linkState('payment1')} />
+						&nbsp;
+						+
+						&nbsp;
+						<PaymentComponent valueLink = {this.linkState('payment2')} />
+						<br />
+						<br />
+						{totalPayment}
+						<br />
+						<br />
+						{this.state.metric}
+					</div>
+				);
+			}
+		});
+
+
+		var PaymentComponent = React.createClass({
+			render: function(){
+				var props = this.props;
+				return this.transferPropsTo(
+					<input type="text" />
+				)
+			}
+		});
+
+		var reactComponent = React.renderComponent(
+			<App url="metric"/>,
+			document.getElementById('app')
+		);
+
+	</script>
+
+</body>
+</html>
