@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mounting</title>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+
+</head>
+<body>
+	
+	<!-- container node -->
+	<div id="app"></div>
+
+
+	<script src="js/react-with-addons-0.11.0.js"></script>
+  	<script src="js/JSXTransformer-0.11.1.js"></script>
+  	<script src="js/jquery-2.1.1.min.js"></script>
+  	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+  	<script src="js/lodash.js"></script>
+
+
+
+	<script type="text/jsx">
+	/** @jsx React.DOM */
+
+		var App = React.createClass({
+
+			mixins: [React.addons.LinkedStateMixin],
+
+			loadData: function(){
+				return $.get("https://gsr-demo.firebaseio-demo.com/"+ this.props.url+ '.json');
+			},
+
+			componentWillMount: function(){
+				// debugger;
+			},
+
+			componentDidMount: function(){
+				// debugger;
+				this.loadData().then(function(data){
+					console.log(data);
+					this.setState({
+						metric:data
+					})
+				}.bind(this));
+				$('#tip').tooltip();
+
+			},
+
+			shouldComponentUpdate: function(nextProps, nextState){
+				return nextState.metric > 100 
+			},
+
+			componentWillReceiveProps: function(nextProps){
+				var lastUrl = this.props.url;
+				console.log(lastUrl)
+				this.loadData(nextProps.url).then(function(data){
+					console.log(data);
+					this.setState({
+						metric:data
+					});
+				}.bind(this));
+			},
+
+			componentWillUnmount: function(){
+				debugger;
+      			$('#tip').tooltip('destroy');
+			},
+
+			getInitialState: function () {
+				return {
+					metric: 0,
+					lastRoute: ''
+				}
+		    },
+
+			render: function() {
+				return (
+					<div class="container">
+						<h2>{this.state.lastRoute}</h2>
+						<h2>{this.state.metric}</h2>
+						<h2><a id="tip" href="#" data-toggle="tooltip" title="Hover!">Hover over me</a></h2>
+					</div>
+				);
+			}
+		});
+
+
+
+		var reactComponent = React.renderComponent(
+			<App url="metric"/>,
+			document.getElementById('app')
+		);
+
+		
+		// React.unmountComponentAtNode(document.getElementById("app"))
+	</script>
+
+</body>
+</html>
